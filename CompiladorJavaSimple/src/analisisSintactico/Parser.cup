@@ -1,0 +1,117 @@
+package analisisSintactico;
+
+import java_cup.runtime.*;
+
+terminal                tclass, tipoInt, tipoBoolean, tipoString, llaveIzq, llaveDer;
+terminal                igual, puntocoma, coma, parenIzq, parenDer, mas, menos;
+terminal                asterisco, barra, equals, notequals, mayorque, menorque;
+terminal                mayorigu, menorigu, logicand, logicor, booltru, boolfal;
+terminal      		    string;
+terminal      			numero;
+terminal      			id;
+non terminal  			programa, clase, cuerpo, elemento, asignacion, tipo;
+non terminal  			factor, Operacion, Operacion1, Operacion2, Operacion3;
+non terminal  			Suma, Prod, Relacion, Logico, Boolean;
+non terminal  			funcion, funcionDef, args, nextArg, contenido, params, nextParam;
+
+start with programa;
+
+programa ::=  clase	{: :}
+			;
+			
+clase	::=	tclass id llaveIzq cuerpo llaveDer {: :}
+			;
+			
+cuerpo ::= cuerpo elemento {: :}
+			|
+			;
+			
+elemento ::= asignacion 	{: :}
+			| funcionDef	{: :}
+			| clase			{: :}
+			;
+			
+asignacion ::= tipo id igual Operacion puntocoma {: :}
+			| tipo id puntocoma {: :}
+			| id igual Operacion puntocoma {: :}
+			;
+			
+funcionDef ::= tipo id parenIzq args parenDer llaveIzq contenido llaveDer {: :}
+			;
+			
+args ::= tipo id nextArg 	{: :}
+		| 					{: :}
+		;
+
+nextArg ::= coma tipo id nextArg	{: :}
+		|							{: :}
+		;
+		
+contenido ::= contenido asignacion {: :}
+			| contenido funcion puntocoma {: :}
+			| {: :}
+			;
+			
+tipo	::= tipoInt			{: :}
+			| tipoBoolean 	{: :}
+			| tipoString	{: :}
+			;
+		
+Operacion ::= Operacion1				{: :}
+		| Operacion Suma factor			{: :}
+		;
+	
+Operacion1 ::= Operacion2				{: :}
+		| Operacion1 Prod factor		{: :}
+		;
+		
+Operacion2 ::= Operacion3				{: :}
+		| Operacion2 Relacion factor 	{: :}
+		;
+		
+Operacion3 ::= factor 					{: :}
+		| Operacion3 Logico factor		{: :}
+		;
+	
+factor ::= id 					{: :}
+		| numero 				{: :}
+		| Boolean				{: :}
+		| string				{: :}
+		| funcion				{: :}
+		| parenIzq Operacion parenDer 	{: :}
+		;
+		
+funcion ::= id parenIzq params parenDer {: :}
+		;
+		
+params ::= Operacion nextParam	{: :}
+		| 						{: :}
+		;
+
+nextParam ::= coma Operacion nextParam	{: :}
+			| {: :}
+			;
+		
+Suma ::= mas 	{: :}
+		| menos {: :}
+		;
+		
+Prod ::= asterisco	{: :}
+		| barra		{: :}
+		;
+		
+Relacion ::= equals		{: :}
+		| notequals		{: :}
+		| mayorque		{: :}
+		| menorque		{: :}
+		| mayorigu		{: :}
+		| menorigu		{: :}
+		;
+		
+Logico ::= logicand	{: :}
+		|	logicor	{: :}
+		;
+		
+Boolean ::= booltru	{: :}
+		|	boolfal	{: :}
+		;

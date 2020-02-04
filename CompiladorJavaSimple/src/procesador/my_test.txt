@@ -1,0 +1,12 @@
+class MyClass {
+	class My_other_class {
+	}
+	class My_other_other_class {
+		int aaa = 2;
+		int b = aaa + "asasas";
+		String funcioncilla ( int c, String s ) {
+			s = stringToInteger(my_function(s));
+		}
+		String hfausfh = funcioncilla(aaa, "holo");
+	}
+}

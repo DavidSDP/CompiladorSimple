@@ -1,0 +1,5 @@
+class MyClass {
+	class My_other_class {
+		int a = 2;
+	}
+}
