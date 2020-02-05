@@ -16,19 +16,11 @@ import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 %cup
 
 %{
-
     public Symbol symbol(int type){
-		return new ComplexSymbol(sym.terminalNames[type], type,
-						new Location(yyline+1, yycolumn+1, yychar),
-						new Location(yyline+1, yycolumn+yylength(), yychar+yylength())
-		);
+		return new ComplexSymbol(sym.terminalNames[type], type);
     }
     public Symbol symbol(int type, String lexem){
-		return new ComplexSymbol(sym.terminalNames[type], type,
-							new Location(yyline+1, yycolumn +1, yychar), 
-							new Location(yyline+1, yycolumn+yylength(), yychar+yylength()),
-							lexem
-		);
+		return new ComplexSymbol(sym.terminalNames[type], type, lexem);
     }
 %}
 
@@ -37,31 +29,27 @@ import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 FINLINEA	= \r|\n|\r\n
 ESPACIO		= {FINLINEA} | [ \t\f]
 
-tclass		=	"class"
-tipoInt		=	"int"
-tipoBoolean	=	"boolean"
-tipoString	=	"String"
+tClass		=	"class"
+tipoVar		=	"int"|"boolean"|"String"
+tipoVoid	=	"void"
+
 llaveIzq	=	"{"
 llaveDer	=	"}"
+
 igual		=	"="
 puntocoma	=	";"
 coma		=	","
+
 parenIzq	=	"("
 parenDer	=	")"
-mas			=	"+"
-menos		=	"-"
-asterisco	=	"*"
-barra		=	"/"
-equals		=	"=="
-notequals	=	"!="
-mayorque	=	">"
-menorque	=	"<"
-mayorigu	=	">="
-menorigu	=	"<="
-logicand	=	"&&"
-logicor		=	"||"
-booltru		=	"true"
-boolfal		=	"false"
+
+opSuma		=	"+"|"-"
+opProd		=	"*"|"/"
+
+comparador	=	"=="|"!="|">"|"<"|">="|"<="
+opLogico	=	"&&"|"||"
+booleano	=	"true"|"false"
+
 string		=	[\"][A-Za-z0-9_]*[\"]
 numero		=	(0|[1-9][0-9]*)
 
@@ -71,31 +59,29 @@ id			=	[A-Za-z][A-Za-z0-9_]*
 
 {ESPACIO}		{/* nada que hacer */}
 
-{tclass}		{return symbol(sym.tclass, null);}
-{tipoBoolean}	{return symbol(sym.tipoBoolean, "boolean");}
-{tipoInt}		{return symbol(sym.tipoInt, "int");}
-{tipoString}	{return symbol(sym.tipoString, "String");}
+{tClass}		{return symbol(sym.tclass, null);}
+{tipoVar}		{return symbol(sym.tipoVar, this.yytext());}
+{tipoVoid}		{return symbol(sym.tipoVoid, null);}
+
 {llaveIzq}		{return symbol(sym.llaveIzq, null);}
 {llaveDer}		{return symbol(sym.llaveDer, null);}
+
 {igual}			{return symbol(sym.igual, null);}
 {puntocoma}		{return symbol(sym.puntocoma, null);}
 {coma}			{return symbol(sym.coma, null);}
+
 {parenIzq}		{return symbol(sym.parenIzq, null);}
 {parenDer}		{return symbol(sym.parenDer, null);}
-{mas}			{return symbol(sym.mas, "+");}
-{menos}			{return symbol(sym.menos, "-");}
-{asterisco}		{return symbol(sym.asterisco, "*");}
-{barra}			{return symbol(sym.barra, "/");}
-{equals}		{return symbol(sym.equals, "==");}
-{notequals}		{return symbol(sym.notequals, "!=");}
-{mayorque}		{return symbol(sym.mayorque, ">");}
-{menorque}		{return symbol(sym.menorque, "<");}
-{mayorigu}		{return symbol(sym.mayorigu, ">=");}
-{menorigu}		{return symbol(sym.menorigu, "<=");}
-{logicand}		{return symbol(sym.logicand, "&&");}
-{logicor}		{return symbol(sym.logicor, "||");}
-{booltru}		{return symbol(sym.booltru, "true");}
-{boolfal}		{return symbol(sym.boolfal, "false");}
+
+{opSuma}		{return symbol(sym.opSuma, this.yytext());}
+{opProd}		{return symbol(sym.opProd, this.yytext());}
+
+{comparador}	{return symbol(sym.comparador, this.yytext());}
+
+{opLogico}		{return symbol(sym.opLogico, this.yytext());}
+
+{booleano}		{return symbol(sym.booleano, this.yytext());}
+
 {string}		{return symbol(sym.string, this.yytext());}
 {numero}		{return symbol(sym.numero, this.yytext());}
 {id}			{return symbol(sym.id, this.yytext());}

@@ -1,87 +1,116 @@
 package analisisSintactico;
 
 import java_cup.runtime.*;
+import analisisSemantico.simbolos.SimboloArgs;
+import analisisSemantico.simbolos.SimboloAsignacion;
+import analisisSemantico.simbolos.SimboloClase;
+import analisisSemantico.simbolos.SimboloContenido;
+import analisisSemantico.simbolos.SimboloCuerpo;
+import analisisSemantico.simbolos.SimboloElemento;
+import analisisSemantico.simbolos.SimboloFactor;
+import analisisSemantico.simbolos.SimboloFuncionInvk;
+import analisisSemantico.simbolos.SimboloFuncionDecl;
+import analisisSemantico.simbolos.SimboloFuncionDef;
+import analisisSemantico.simbolos.SimboloNextArg;
+import analisisSemantico.simbolos.SimboloNextParam;
+import analisisSemantico.simbolos.SimboloOperacion;
+import analisisSemantico.simbolos.SimboloOperacion1;
+import analisisSemantico.simbolos.SimboloOperacion2;
+import analisisSemantico.simbolos.SimboloOperacion3;
+import analisisSemantico.simbolos.SimboloParams;
+import analisisSemantico.simbolos.SimboloPrograma;
 
-terminal                tclass, tipoInt, tipoBoolean, tipoString, llaveIzq, llaveDer;
-terminal                igual, puntocoma, coma, parenIzq, parenDer, mas, menos;
-terminal                asterisco, barra, equals, notequals, mayorque, menorque;
-terminal                mayorigu, menorigu, logicand, logicor, booltru, boolfal;
-terminal      		    string;
-terminal      			numero;
-terminal      			id;
-non terminal  			programa, clase, cuerpo, elemento, asignacion, tipo;
-non terminal  			factor, Operacion, Operacion1, Operacion2, Operacion3;
-non terminal  			Suma, Prod, Relacion, Logico, Boolean;
-non terminal  			funcion, funcionDef, args, nextArg, contenido, params, nextParam;
+terminal    ComplexSymbol	tclass, tipoVar, tipoVoid, llaveIzq, llaveDer;
+terminal    ComplexSymbol	igual, puntocoma, coma, parenIzq, parenDer;
+terminal	ComplexSymbol	comparador, opLogico, booleano, opSuma, opProd;
+terminal	ComplexSymbol	string, numero, id;
+
+non terminal	SimboloPrograma	programa;
+non terminal	SimboloClase	clase;
+non terminal	SimboloCuerpo	cuerpo;
+non terminal	SimboloElemento	elemento;
+non terminal	SimboloAsignacion	asignacion;
+non terminal  	SimboloFactor	factor;
+non terminal	SimboloOperacion	Operacion;
+non terminal	SimboloOperacion1	Operacion1;
+non terminal	SimboloOperacion2	Operacion2;
+non terminal	SimboloOperacion3	Operacion3;
+non terminal  	SimboloFuncionInvk	funcionInvk;
+non terminal	SimboloFuncionDef	funcionDef;
+non terminal	SimboloFuncionDecl	funcionDecl;
+non terminal	SimboloArgs			args;
+non terminal	SimboloNextArg		nextArg;
+non terminal	SimboloContenido	contenido;
+non terminal	SimboloParams		params;
+non terminal	SimboloNextParam	nextParam;
 
 start with programa;
 
-programa ::=  clase	{: :}
+programa ::=  clase	{: System.out.println("NUEVO PROGRAMA"); :}
 			;
 			
-clase	::=	tclass id llaveIzq cuerpo llaveDer {: :}
+clase	::=	tclass id llaveIzq cuerpo llaveDer {: System.out.println("NUEVA CLASE"); :}
 			;
 			
-cuerpo ::= cuerpo elemento {: :}
+cuerpo ::= cuerpo elemento 	{: System.out.println("NUEVO CUERPO"); :}
 			|
 			;
 			
 elemento ::= asignacion 	{: :}
-			| funcionDef	{: :}
+			| funcionDecl	{: :}
 			| clase			{: :}
 			;
 			
-asignacion ::= tipo id igual Operacion puntocoma {: :}
-			| tipo id puntocoma {: :}
-			| id igual Operacion puntocoma {: :}
+asignacion ::= tipoVar id igual Operacion puntocoma {: :}
+			| tipoVar id puntocoma 					{: :}
+			| id igual Operacion puntocoma 			{: :}
 			;
-			
-funcionDef ::= tipo id parenIzq args parenDer llaveIzq contenido llaveDer {: :}
+
+funcionDecl ::= tipoVoid funcionDef 	{: :}
+			| tipoVar funcionDef 	{: :}
 			;
+
+funcionDef ::= id parenIzq args parenDer llaveIzq contenido llaveDer {: :}
+			;
+		
+funcionInvk ::= id parenIzq params parenDer {: :}
+		;
 			
-args ::= tipo id nextArg 	{: :}
-		| 					{: :}
+args ::= tipoVar id nextArg 	{: :}
+		| 						{: :}
 		;
 
-nextArg ::= coma tipo id nextArg	{: :}
+nextArg ::= coma tipoVar id nextArg	{: :}
 		|							{: :}
 		;
 		
-contenido ::= contenido asignacion {: :}
-			| contenido funcion puntocoma {: :}
-			| {: :}
-			;
-			
-tipo	::= tipoInt			{: :}
-			| tipoBoolean 	{: :}
-			| tipoString	{: :}
+contenido ::= contenido asignacion 				{: :}
+			| contenido funcionInvk puntocoma 	{: :}
+			| 									{: :}
 			;
 		
 Operacion ::= Operacion1				{: :}
-		| Operacion Suma factor			{: :}
+		| Operacion opSuma factor		{: :}
 		;
 	
 Operacion1 ::= Operacion2				{: :}
-		| Operacion1 Prod factor		{: :}
+		| Operacion1 opProd factor		{: :}
 		;
 		
 Operacion2 ::= Operacion3				{: :}
-		| Operacion2 Relacion factor 	{: :}
+		| Operacion2 comparador factor 	{: :}
 		;
 		
 Operacion3 ::= factor 					{: :}
-		| Operacion3 Logico factor		{: :}
+		| Operacion3 opLogico factor	{: :}
 		;
 	
-factor ::= id 					{: :}
-		| numero 				{: :}
-		| Boolean				{: :}
-		| string				{: :}
-		| funcion				{: :}
+factor ::= id 							{: :}
+		| numero 						{: :}
+		| booleano						{: :}
+		| string						{: :}
+		| funcionInvk						{: :}
 		| parenIzq Operacion parenDer 	{: :}
-		;
-		
-funcion ::= id parenIzq params parenDer {: :}
 		;
 		
 params ::= Operacion nextParam	{: :}
@@ -89,29 +118,5 @@ params ::= Operacion nextParam	{: :}
 		;
 
 nextParam ::= coma Operacion nextParam	{: :}
-			| {: :}
+			| 							{: :}
 			;
-		
-Suma ::= mas 	{: :}
-		| menos {: :}
-		;
-		
-Prod ::= asterisco	{: :}
-		| barra		{: :}
-		;
-		
-Relacion ::= equals		{: :}
-		| notequals		{: :}
-		| mayorque		{: :}
-		| menorque		{: :}
-		| mayorigu		{: :}
-		| menorigu		{: :}
-		;
-		
-Logico ::= logicand	{: :}
-		|	logicor	{: :}
-		;
-		
-Boolean ::= booltru	{: :}
-		|	boolfal	{: :}
-		;

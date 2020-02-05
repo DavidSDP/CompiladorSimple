@@ -8,43 +8,32 @@ package analisisSintactico;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int string = 27;
-  public static final int menorigu = 22;
-  public static final int mayorigu = 21;
-  public static final int llaveIzq = 6;
-  public static final int coma = 10;
-  public static final int numero = 28;
-  public static final int llaveDer = 7;
-  public static final int notequals = 18;
-  public static final int tipoInt = 3;
-  public static final int parenIzq = 11;
-  public static final int logicand = 23;
-  public static final int logicor = 24;
-  public static final int parenDer = 12;
-  public static final int equals = 17;
-  public static final int tipoBoolean = 4;
-  public static final int boolfal = 26;
-  public static final int menos = 14;
-  public static final int menorque = 20;
-  public static final int igual = 8;
+  public static final int string = 17;
+  public static final int opLogico = 13;
+  public static final int llaveIzq = 5;
+  public static final int tipoVar = 3;
+  public static final int tipoVoid = 4;
+  public static final int coma = 9;
+  public static final int numero = 18;
+  public static final int llaveDer = 6;
+  public static final int booleano = 14;
+  public static final int opProd = 16;
+  public static final int parenIzq = 10;
+  public static final int comparador = 12;
+  public static final int parenDer = 11;
+  public static final int igual = 7;
   public static final int EOF = 0;
-  public static final int id = 29;
-  public static final int puntocoma = 9;
-  public static final int mayorque = 19;
-  public static final int tipoString = 5;
+  public static final int id = 19;
+  public static final int puntocoma = 8;
   public static final int error = 1;
-  public static final int barra = 16;
   public static final int tclass = 2;
-  public static final int booltru = 25;
-  public static final int asterisco = 15;
-  public static final int mas = 13;
+  public static final int opSuma = 15;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "tclass",
-  "tipoInt",
-  "tipoBoolean",
-  "tipoString",
+  "tipoVar",
+  "tipoVoid",
   "llaveIzq",
   "llaveDer",
   "igual",
@@ -52,20 +41,11 @@ public class sym {
   "coma",
   "parenIzq",
   "parenDer",
-  "mas",
-  "menos",
-  "asterisco",
-  "barra",
-  "equals",
-  "notequals",
-  "mayorque",
-  "menorque",
-  "mayorigu",
-  "menorigu",
-  "logicand",
-  "logicor",
-  "booltru",
-  "boolfal",
+  "comparador",
+  "opLogico",
+  "booleano",
+  "opSuma",
+  "opProd",
   "string",
   "numero",
   "id"
