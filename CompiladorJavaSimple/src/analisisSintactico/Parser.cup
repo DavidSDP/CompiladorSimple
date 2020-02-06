@@ -1,6 +1,7 @@
 package analisisSintactico;
 
 import java_cup.runtime.*;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import analisisSemantico.simbolos.SimboloArgs;
 import analisisSemantico.simbolos.SimboloAsignacion;
 import analisisSemantico.simbolos.SimboloClase;
@@ -20,10 +21,12 @@ import analisisSemantico.simbolos.SimboloOperacion3;
 import analisisSemantico.simbolos.SimboloParams;
 import analisisSemantico.simbolos.SimboloPrograma;
 
-terminal    ComplexSymbol	tclass, tipoVar, tipoVoid, llaveIzq, llaveDer;
-terminal    ComplexSymbol	igual, puntocoma, coma, parenIzq, parenDer;
-terminal	ComplexSymbol	comparador, opLogico, booleano, opSuma, opProd;
-terminal	ComplexSymbol	string, numero, id;
+terminal    Symbol	tclass, tipoVar, tipoVoid, llaveIzq, llaveDer;
+terminal    Symbol	igual, puntocoma, coma, parenIzq, parenDer;
+terminal	String	comparador, opLogico, booleano, opSuma, opProd;
+terminal	Symbol	string;
+terminal	Symbol	numero;
+terminal	Symbol	id;
 
 non terminal	SimboloPrograma	programa;
 non terminal	SimboloClase	clase;
@@ -89,8 +92,8 @@ contenido ::= contenido asignacion 				{: :}
 			| 									{: :}
 			;
 		
-Operacion ::= Operacion1				{: :}
-		| Operacion opSuma factor		{: :}
+Operacion ::= Operacion1:o				{: RESULT = new SimboloOperacion(o); :}
+		| Operacion:o opSuma:s factor:f	{: RESULT = new SimboloOperacion(o,s,f); :}
 		;
 	
 Operacion1 ::= Operacion2				{: :}
@@ -109,7 +112,7 @@ factor ::= id 							{: :}
 		| numero 						{: :}
 		| booleano						{: :}
 		| string						{: :}
-		| funcionInvk						{: :}
+		| funcionInvk					{: :}
 		| parenIzq Operacion parenDer 	{: :}
 		;
 		
@@ -117,6 +120,7 @@ params ::= Operacion nextParam	{: :}
 		| 						{: :}
 		;
 
-nextParam ::= coma Operacion nextParam	{: :}
-			| 							{: :}
+nextParam ::= coma Operacion:o nextParam:n 	{: 	RESULT = new SimboloNextParam(o, n);
+											:}
+			| 							{: RESULT = null; :}
 			;

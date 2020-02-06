@@ -5,6 +5,6 @@ class MyClass {
 	void main () {
 		int aaa = 2;
 		int b = "asasas";
-		String hfausfh = funcioncilla(aaa, "holo");
+		String hfausfh = funcioncilla(aaa, "holo", (4+5)>33);
 	}
 }

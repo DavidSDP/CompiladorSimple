@@ -6,6 +6,7 @@
 package analisisSintactico;
 
 import java_cup.runtime.*;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import analisisSemantico.simbolos.SimboloArgs;
 import analisisSemantico.simbolos.SimboloAsignacion;
 import analisisSemantico.simbolos.SimboloClase;
@@ -441,7 +442,10 @@ class CUP$parser$actions {
           case 22: // Operacion ::= Operacion1 
             {
               SimboloOperacion RESULT =null;
-		 
+		int oleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int oright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		SimboloOperacion1 o = (SimboloOperacion1)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = new SimboloOperacion(o); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Operacion",6, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -450,7 +454,16 @@ class CUP$parser$actions {
           case 23: // Operacion ::= Operacion opSuma factor 
             {
               SimboloOperacion RESULT =null;
-		 
+		int oleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).left;
+		int oright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)).right;
+		SimboloOperacion o = (SimboloOperacion)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-2)).value;
+		int sleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int sright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		String s = (String)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int fleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int fright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		SimboloFactor f = (SimboloFactor)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 RESULT = new SimboloOperacion(o,s,f); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Operacion",6, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -585,7 +598,14 @@ class CUP$parser$actions {
           case 38: // nextParam ::= coma Operacion nextParam 
             {
               SimboloNextParam RESULT =null;
-		 
+		int oleft = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).left;
+		int oright = ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)).right;
+		SimboloOperacion o = (SimboloOperacion)((java_cup.runtime.Symbol) CUP$parser$stack.elementAt(CUP$parser$top-1)).value;
+		int nleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
+		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
+		SimboloNextParam n = (SimboloNextParam)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
+		 	RESULT = new SimboloNextParam(o, n);
+											
               CUP$parser$result = parser.getSymbolFactory().newSymbol("nextParam",17, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -594,7 +614,7 @@ class CUP$parser$actions {
           case 39: // nextParam ::= 
             {
               SimboloNextParam RESULT =null;
-		 
+		 RESULT = null; 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("nextParam",17, ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
