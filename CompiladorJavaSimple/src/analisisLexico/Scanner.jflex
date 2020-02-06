@@ -1,8 +1,6 @@
 package analisisLexico;
 import analisisSintactico.sym;
-import java_cup.runtime.Symbol;
-import java_cup.runtime.ComplexSymbolFactory;
-import java_cup.runtime.ComplexSymbolFactory.Location;
+import analisisSemantico.simbolos.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 
 %%
@@ -16,10 +14,10 @@ import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 %cup
 
 %{
-    public Symbol symbol(int type){
+    public ComplexSymbol symbol(int type){
 		return new ComplexSymbol(sym.terminalNames[type], type);
     }
-    public Symbol symbol(int type, String lexem){
+    public ComplexSymbol symbol(int type, String lexem){
 		return new ComplexSymbol(sym.terminalNames[type], type, lexem);
     }
 %}
@@ -84,6 +82,6 @@ id			=	[A-Za-z][A-Za-z0-9_]*
 
 {string}		{return symbol(sym.string, this.yytext());}
 {numero}		{return symbol(sym.numero, this.yytext());}
-{id}			{return symbol(sym.id, this.yytext());}
+{id}			{return new SimboloID(symbol(sym.id, this.yytext()));}
 
 [^]				{throw new Error("Carácter no reconocido: <"+yytext()+">"); }

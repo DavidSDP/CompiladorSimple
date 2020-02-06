@@ -2,9 +2,7 @@
 
 package analisisLexico;
 import analisisSintactico.sym;
-import java_cup.runtime.Symbol;
-import java_cup.runtime.ComplexSymbolFactory;
-import java_cup.runtime.ComplexSymbolFactory.Location;
+import analisisSemantico.simbolos.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 
 
@@ -273,10 +271,10 @@ public class Scanner implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
-    public Symbol symbol(int type){
+    public ComplexSymbol symbol(int type){
 		return new ComplexSymbol(sym.terminalNames[type], type);
     }
-    public Symbol symbol(int type, String lexem){
+    public ComplexSymbol symbol(int type, String lexem){
 		return new ComplexSymbol(sym.terminalNames[type], type, lexem);
     }
 
@@ -675,7 +673,7 @@ public class Scanner implements java_cup.runtime.Scanner {
             // fall through
           case 22: break;
           case 3: 
-            { return symbol(sym.id, this.yytext());
+            { return new SimboloID(symbol(sym.id, this.yytext()));
             } 
             // fall through
           case 23: break;

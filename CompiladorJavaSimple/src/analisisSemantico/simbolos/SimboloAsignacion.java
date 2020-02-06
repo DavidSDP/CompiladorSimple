@@ -1,5 +1,27 @@
 package analisisSemantico.simbolos;
 
-public class SimboloAsignacion {
+import java_cup.runtime.Symbol;
 
+public class SimboloAsignacion {
+	
+	private String tipo;
+	private String id;
+	private SimboloOperacion operacion;
+	
+	public SimboloAsignacion(String t, String i, SimboloOperacion o) {
+		this.tipo = t;
+		this.id = i;
+		this.operacion = o;
+	}
+	
+	public SimboloAsignacion(String t, String i) {
+		this.tipo = t;
+		this.id = i;
+	}
+	
+	public SimboloAsignacion(String i, SimboloOperacion o) {
+		this.id = i;
+		this.operacion = o;
+	}
+	
 }
