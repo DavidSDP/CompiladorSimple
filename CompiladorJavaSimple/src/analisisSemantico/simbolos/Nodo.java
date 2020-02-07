@@ -1,5 +1,9 @@
 package analisisSemantico.simbolos;
 
-public class Nodo {
-	
+import java.util.List;
+
+public interface Nodo {
+	Nodo getParent();
+	List<Nodo> getChildren();
+	String getName();
 }

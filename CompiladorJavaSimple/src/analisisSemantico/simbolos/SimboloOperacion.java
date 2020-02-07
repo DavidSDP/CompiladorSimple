@@ -1,6 +1,6 @@
 package analisisSemantico.simbolos;
 
-public class SimboloOperacion extends Nodo{
+public class SimboloOperacion{
 
 	private SimboloOperacion operacion;
 	private String operador;

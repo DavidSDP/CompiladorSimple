@@ -1,6 +1,6 @@
 package analisisSemantico.simbolos;
 
-public class SimboloParams extends Nodo{
+public class SimboloParams{
 	
 	private SimboloOperacion operacion;
 	private SimboloParams nextParam;
