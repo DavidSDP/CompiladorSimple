@@ -1,0 +1,7 @@
+class MyClass {
+	class Hola {
+		int aaa = 547;
+		int hfausfh = 2;
+	}
+	int aaa = 0;
+} 

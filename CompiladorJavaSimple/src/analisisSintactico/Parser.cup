@@ -62,7 +62,10 @@ funcionDef ::= id:i parenIzq args:a parenDer llaveIzq contenido:c llaveDer {: RE
 funcionInvk ::= id:i parenIzq params:p parenDer {: RESULT = new SimboloFuncionInvk(i,p); :}
 		;
 			
-args ::= tipoVar:t id:i nextArg:n			{: RESULT = new SimboloArgs(t,i,n); :}
+args ::= tipoVar:t id:i nextArg:n			{:
+											compruebaID(); insertaID();	
+											 RESULT = new SimboloArgs(t,i,n);
+											 :}
 		| 									{: RESULT = null; :}
 		;
 

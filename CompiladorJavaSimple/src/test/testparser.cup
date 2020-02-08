@@ -1,0 +1,42 @@
+package test;
+
+import analisisLexico.*;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+
+parser code	{:
+private Entorno top = null;
+private Entorno guardado = null;
+:}
+
+terminal    String			tclass, tipoVar, llaveIzq, llaveDer;
+terminal    String			igual, puntocoma;
+terminal	String			numero;
+terminal	String			id;
+
+non terminal				programa;
+non terminal				clase;
+non terminal				cuerpo;
+non terminal				elemento;
+non terminal				asignacion;
+
+start with programa;
+
+programa 	::= clase:c											{: :}
+			;
+			
+clase		::=	tclass:t id:i llaveIzq  {: guardado = top; top = new Entorno(top); :}
+				cuerpo:c llaveDer 		{: top.printEntorno(); top = guardado; :}
+			;
+			
+cuerpo 		::= cuerpo:c elemento:e 							{: :}
+			|													{: :}
+			;
+			
+elemento 	::= asignacion:a 									{: System.out.println("ASIGNACION DE "+a+" EN ENTORNO -> "+top.toString()); :}
+			| clase:c											{: :}
+			;
+			
+asignacion 	::= tipoVar:t id:i igual numero:n puntocoma 		{: if(top.contains(i)) throw new Error("ID YA EXISTE"); top.put(i, new ComplexSymbol(i, sym.id)); RESULT = i; :}
+			| tipoVar:t id:i puntocoma 							{: top.put(i, new ComplexSymbol(i, sym.id)); RESULT = i; :}
+			| id:i igual numero:n puntocoma 					{: top.put(i, new ComplexSymbol(i, sym.id)); RESULT = i; :}
+			;
