@@ -2,11 +2,8 @@ package test;
 
 import analisisLexico.*;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
-
-parser code	{:
-private Entorno top = null;
-private Entorno guardado = null;
-:}
+import analisisLexico.Entorno.Tipo;
+import analisisLexico.Entorno.GlobalVariables;
 
 terminal    String			tclass, tipoVar, llaveIzq, llaveDer;
 terminal    String			igual, puntocoma;
@@ -21,22 +18,24 @@ non terminal				asignacion;
 
 start with programa;
 
-programa 	::= clase:c											{: :}
+programa 	::= 							{: GlobalVariables.entraBloque(); :}
+				clase:c 					{: GlobalVariables.saleBloque(); :}
 			;
 			
-clase		::=	tclass:t id:i llaveIzq  {: guardado = top; top = new Entorno(top); :}
-				cuerpo:c llaveDer 		{: top.printEntorno(); top = guardado; :}
+clase		::=	tclass:t id:i llaveIzq  	{: GlobalVariables.entraBloque(); :}
+				cuerpo:c 					{: GlobalVariables.saleBloque(); :}
+				llaveDer
 			;
 			
-cuerpo 		::= cuerpo:c elemento:e 							{: :}
-			|													{: :}
+cuerpo 		::= cuerpo:c elemento:e 		{: :}
+			|								{: :}
 			;
 			
-elemento 	::= asignacion:a 									{: System.out.println("ASIGNACION DE "+a+" EN ENTORNO -> "+top.toString()); :}
+elemento 	::= asignacion:a 									{: :}
 			| clase:c											{: :}
 			;
 			
-asignacion 	::= tipoVar:t id:i igual numero:n puntocoma 		{: if(top.contains(i)) throw new Error("ID YA EXISTE"); top.put(i, new ComplexSymbol(i, sym.id)); RESULT = i; :}
-			| tipoVar:t id:i puntocoma 							{: top.put(i, new ComplexSymbol(i, sym.id)); RESULT = i; :}
-			| id:i igual numero:n puntocoma 					{: top.put(i, new ComplexSymbol(i, sym.id)); RESULT = i; :}
+asignacion 	::= tipoVar:t id:i igual numero:n puntocoma 		{: GlobalVariables.asignaID(i,t); :}
+			| tipoVar:t id:i puntocoma 							{: GlobalVariables.asignaID(i,t); :}
+			| id:i igual numero:n puntocoma 					{: /* -> no es una declaración nueva <- GlobalVariables.asignaID(i,t); */ :}
 			;

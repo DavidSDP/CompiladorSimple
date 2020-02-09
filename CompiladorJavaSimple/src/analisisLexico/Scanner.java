@@ -673,7 +673,7 @@ public class Scanner implements java_cup.runtime.Scanner {
             // fall through
           case 22: break;
           case 3: 
-            { return new SimboloID(symbol(sym.id, this.yytext()));
+            { return symbol(sym.id, this.yytext());
             } 
             // fall through
           case 23: break;
@@ -753,12 +753,12 @@ public class Scanner implements java_cup.runtime.Scanner {
             // fall through
           case 38: break;
           case 19: 
-            { return symbol(sym.tipoVoid, null);
+            { return symbol(sym.tipoVoid, this.yytext());
             } 
             // fall through
           case 39: break;
           case 20: 
-            { return symbol(sym.tclass, null);
+            { return symbol(sym.tclass, this.yytext());
             } 
             // fall through
           case 40: break;

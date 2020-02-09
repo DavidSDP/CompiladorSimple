@@ -57,9 +57,9 @@ id			=	[A-Za-z][A-Za-z0-9_]*
 
 {ESPACIO}		{/* nada que hacer */}
 
-{tClass}		{return symbol(sym.tclass, null);}
+{tClass}		{return symbol(sym.tclass, this.yytext());}
 {tipoVar}		{return symbol(sym.tipoVar, this.yytext());}
-{tipoVoid}		{return symbol(sym.tipoVoid, null);}
+{tipoVoid}		{return symbol(sym.tipoVoid, this.yytext());}
 
 {llaveIzq}		{return symbol(sym.llaveIzq, null);}
 {llaveDer}		{return symbol(sym.llaveDer, null);}

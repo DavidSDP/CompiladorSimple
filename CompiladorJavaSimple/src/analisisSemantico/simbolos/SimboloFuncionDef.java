@@ -11,4 +11,8 @@ public class SimboloFuncionDef {
 		this.contenido = c;
 	}
 	
+	public String getID() {
+		return this.id;
+	}
+	
 }

@@ -1,7 +1,18 @@
 class MyClass {
+	int a;
+	int b;
+	int c;
 	class Hola {
-		int aaa = 547;
-		int hfausfh = 2;
+		int a;
+		int b;
+		int d;
 	}
-	int aaa = 0;
-} 
+	class Adios {
+		class BonDia {
+			int c;
+		}
+		int c;
+		int a;
+	}
+	int d;
+}
