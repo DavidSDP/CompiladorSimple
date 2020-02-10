@@ -1,6 +1,8 @@
 package analisisSemantico.simbolos;
 
-public class SimboloCuerpo {
+import analisisLexico.Entorno.Tipo;
+
+public class SimboloCuerpo implements TipoSubyacente{
 	
 	private SimboloCuerpo cuerpo;
 	private SimboloElemento elemento;
@@ -8,6 +10,11 @@ public class SimboloCuerpo {
 	public SimboloCuerpo(SimboloCuerpo c, SimboloElemento e) {
 		this.cuerpo = c;
 		this.elemento = e;
+	}
+
+	@Override
+	public Tipo getTipoSubyacente() {
+		return Tipo.Void;
 	}
 	
 }

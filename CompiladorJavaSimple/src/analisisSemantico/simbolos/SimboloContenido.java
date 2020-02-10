@@ -1,6 +1,8 @@
 package analisisSemantico.simbolos;
 
-public class SimboloContenido {
+import analisisLexico.Entorno.Tipo;
+
+public class SimboloContenido implements TipoSubyacente{
 	
 	private SimboloContenido contenido;
 	private SimboloExpresion expresion;
@@ -16,6 +18,11 @@ public class SimboloContenido {
 		this.retorno = r;
 		this.contenido = c;
 		this.operacion = o;
+	}
+
+	@Override
+	public Tipo getTipoSubyacente() {
+		return Tipo.Void;
 	}
 	
 }

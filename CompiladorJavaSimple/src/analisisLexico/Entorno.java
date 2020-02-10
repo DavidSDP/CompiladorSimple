@@ -37,7 +37,7 @@ public class Entorno {
 	}
 	
 	public static enum Tipo{
-		Integer, String, Boolean, Class, Void;
+		Integer, String, Boolean, Class, Void, Identificador;
 		public static Tipo getTipo(String s) {
 			switch(s) {
 				case "void":

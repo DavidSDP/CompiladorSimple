@@ -1,6 +1,8 @@
 package analisisSemantico.simbolos;
 
-public class SimboloElemento {
+import analisisLexico.Entorno.Tipo;
+
+public class SimboloElemento implements TipoSubyacente{
 	
 	private SimboloAsignacion asignacion;
 	private SimboloFuncionDecl funcionDecl;
@@ -16,5 +18,10 @@ public class SimboloElemento {
 	
 	public SimboloElemento(SimboloClase c) {
 		this.clase = c;
+	}
+
+	@Override
+	public Tipo getTipoSubyacente() {
+		return Tipo.Void;
 	}
 }

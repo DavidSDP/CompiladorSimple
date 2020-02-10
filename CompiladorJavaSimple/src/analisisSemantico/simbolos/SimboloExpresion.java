@@ -1,6 +1,8 @@
 package analisisSemantico.simbolos;
 
-public class SimboloExpresion {
+import analisisLexico.Entorno.Tipo;
+
+public class SimboloExpresion implements TipoSubyacente{
 	
 	private SimboloAsignacion a;
 	private SimboloFuncionInvk f;
@@ -11,6 +13,11 @@ public class SimboloExpresion {
 	
 	public SimboloExpresion(SimboloFuncionInvk f) {
 		this.f = f;
+	}
+
+	@Override
+	public Tipo getTipoSubyacente() {
+		return Tipo.Void;
 	}
 	
 }

@@ -1,6 +1,8 @@
 package analisisSemantico.simbolos;
 
-public class SimboloClase {
+import analisisLexico.Entorno.Tipo;
+
+public class SimboloClase implements TipoSubyacente{
 	
 	private String tClass;
 	private String id;
@@ -10,6 +12,11 @@ public class SimboloClase {
 		this.tClass = t;
 		this.id = i;
 		this.cuerpo = c;
+	}
+
+	@Override
+	public Tipo getTipoSubyacente() {
+		return Tipo.Void;
 	}
 	
 }

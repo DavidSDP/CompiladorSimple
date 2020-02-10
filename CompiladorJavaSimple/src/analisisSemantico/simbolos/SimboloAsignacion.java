@@ -1,8 +1,8 @@
 package analisisSemantico.simbolos;
 
-import java_cup.runtime.Symbol;
+import analisisLexico.Entorno.Tipo;
 
-public class SimboloAsignacion {
+public class SimboloAsignacion implements TipoSubyacente{
 	
 	private String tipo;
 	private String id;
@@ -22,6 +22,11 @@ public class SimboloAsignacion {
 	public SimboloAsignacion(String i, SimboloOperacion o) {
 		this.id = i;
 		this.operacion = o;
+	}
+
+	@Override
+	public Tipo getTipoSubyacente() {
+		return Tipo.Void;
 	}
 	
 }

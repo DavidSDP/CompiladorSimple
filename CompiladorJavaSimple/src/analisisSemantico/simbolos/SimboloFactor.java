@@ -1,37 +1,58 @@
 package analisisSemantico.simbolos;
 
-import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+import analisisLexico.Entorno.Tipo;
+import analisisLexico.GlobalVariables;
 
-public class SimboloFactor {
+public class SimboloFactor implements TipoSubyacente{
 	
-	private SimboloID id;
+	private String id;
 	private String string;
-	private ComplexSymbol numero;
-	private ComplexSymbol booleano;
+	private String numero;
+	private String booleano;
 	private SimboloFuncionInvk funcionInvk;
 	private SimboloOperacion operacion;
 
-	public SimboloFactor(SimboloID id) {
-		this.id = id;
+	public SimboloFactor(String s, Tipo tipo) {
+		switch(tipo) {
+			case Boolean:
+				this.booleano = s;
+				break;
+			case Integer:
+				this.numero = s;
+				break;
+			case String:
+				this.string = s;
+				break;
+			case Identificador:
+				this.id = s;
+				break;
+			default:
+				throw new Error("Mal uso -> generación de nuevo SimboloFactor()");
+		}
 	}
-
-	public SimboloFactor(String string) {
-		this.string = string;
-	}
-	
-	public SimboloFactor(ComplexSymbol numero) {
-		this.numero = numero;
-	}
-	
-//	public SimboloFactor(ComplexSymbol booleano) {
-//		
-//	}
 	
 	public SimboloFactor(SimboloFuncionInvk funcionInvk) {
 		this.funcionInvk = funcionInvk;
 	}
 	public SimboloFactor(SimboloOperacion operacion) {
 		this.operacion = operacion;
+	}
+
+	@Override
+	public Tipo getTipoSubyacente() {
+		if(id != null) {
+			return GlobalVariables.getTipoIdentificadorEnEntornoActual(id);
+		}else if(string != null) {
+			return Tipo.String;
+		}else if(numero != null) {
+			return Tipo.Integer;
+		}else if(booleano != null) {
+			return Tipo.Boolean;
+		}else if() {
+			
+		}else if() {
+			
+		}
 	}
 	
 }

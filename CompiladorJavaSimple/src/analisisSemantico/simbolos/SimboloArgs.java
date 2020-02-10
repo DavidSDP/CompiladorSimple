@@ -1,8 +1,8 @@
 package analisisSemantico.simbolos;
 
-import java_cup.runtime.Symbol;
+import analisisLexico.Entorno.Tipo;
 
-public class SimboloArgs {
+public class SimboloArgs implements TipoSubyacente {
 	
 	private String tipo;
 	private String id;
@@ -36,6 +36,11 @@ public class SimboloArgs {
 
 	public void setNextArg(SimboloArgs nextArg) {
 		this.nextArg = nextArg;
+	}
+
+	@Override
+	public Tipo getTipoSubyacente() {
+		return Tipo.Void;
 	}
 	
 	
