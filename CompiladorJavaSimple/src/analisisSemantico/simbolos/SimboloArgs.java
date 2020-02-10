@@ -13,5 +13,30 @@ public class SimboloArgs {
 		this.id = i;
 		this.nextArg = n;
 	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public SimboloArgs getNextArg() {
+		return nextArg;
+	}
+
+	public void setNextArg(SimboloArgs nextArg) {
+		this.nextArg = nextArg;
+	}
+	
 	
 }

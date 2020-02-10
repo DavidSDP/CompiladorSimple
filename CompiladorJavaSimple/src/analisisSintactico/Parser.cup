@@ -1,17 +1,16 @@
 package analisisSintactico;
 
-import java_cup.runtime.*;
-import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import analisisSemantico.simbolos.*;
-import analisisLexico.Entorno.GlobalVariables;
+import analisisLexico.GlobalVariables;
 
-terminal    String			tclass, tipoVar, tipoVoid, llaveIzq, llaveDer;
+terminal    String			tclass, tipoVar, returnSym, tipoVoid, llaveIzq, llaveDer;
 terminal    String			igual, puntocoma, coma, parenIzq, parenDer;
 terminal	String			comparador, opLogico, booleano, opSuma, opProd;
 terminal	String			string;
 terminal	String			numero;
 terminal	String			id;
 
+non terminal	SimboloExpresion	expresion;
 non terminal	SimboloPrograma		programa;
 non terminal	SimboloClase		clase;
 non terminal	SimboloCuerpo		cuerpo;
@@ -23,7 +22,6 @@ non terminal	SimboloOperacion	Operacion1;
 non terminal	SimboloOperacion	Operacion2;
 non terminal	SimboloOperacion	Operacion3;
 non terminal  	SimboloFuncionInvk	funcionInvk;
-non terminal	SimboloFuncionDef	funcionDef;
 non terminal	SimboloFuncionDecl	funcionDecl;
 non terminal	SimboloArgs			args;
 non terminal	SimboloArgs			nextArg;
@@ -41,11 +39,12 @@ programa ::=  												{: GlobalVariables.entraBloque();
 															:}
 			;
 			
-clase	::=	tclass:t id:i 									{: :}
+clase	::=	tclass:t id:i 									{: GlobalVariables.asignaID(i,t);
+															:}
 			llaveIzq 										{: GlobalVariables.entraBloque();
 															:}
 			cuerpo:c										{: GlobalVariables.saleBloque();
-																GlobalVariables.asignaID(i,t);
+																
 															:}
 			llaveDer										{: RESULT = new SimboloClase(t,i,c);
 															:}
@@ -60,35 +59,49 @@ elemento ::= asignacion:a 									{: RESULT = new SimboloElemento(a); :}
 			| clase:c										{: RESULT = new SimboloElemento(c); :}
 			;
 			
-asignacion ::= tipoVar:t id:i								{: :}
-				igual Operacion:o puntocoma 				{: GlobalVariables.asignaID(i,t);
-																RESULT = new SimboloAsignacion(t,i,o);
+asignacion ::= tipoVar:t id:i								{: GlobalVariables.asignaID(i,t);
+															:}
+				igual Operacion:o puntocoma 				{: RESULT = new SimboloAsignacion(t,i,o);
 															:}
 			| tipoVar:t id:i puntocoma 						{: GlobalVariables.asignaID(i,t);
 																RESULT = new SimboloAsignacion(t,i);
 															:}
-			| id:i igual Operacion:o puntocoma 				{: RESULT = new SimboloAsignacion(i,o); :}
-			;
-
-funcionDecl ::= tipoVoid:t funcionDef:f						{: GlobalVariables.asignaFuncionID(f.getID(),t);
-																RESULT = new SimboloFuncionDecl(t,f);
+			| id:i 											{: GlobalVariables.compruebaID(i);
 															:}
-			| tipoVar:t funcionDef:f						{: GlobalVariables.asignaFuncionID(f.getID(),t);
-																RESULT = new SimboloFuncionDecl(t,f);
+				igual Operacion:o puntocoma 				{:	RESULT = new SimboloAsignacion(i,o);
 															:}
 			;
 
-funcionDef ::= id:i parenIzq 								{: GlobalVariables.entraBloque();
+funcionDecl ::= tipoVar:t id:i 								{: GlobalVariables.asignaFuncionID(i,t);
 															:}
-				args:a 										{: :}
+				parenIzq									{: GlobalVariables.entraBloque();
+															:}
+				args:a										{: GlobalVariables.asignaFuncionArgs(i,a);
+															:}
 				parenDer llaveIzq							{: :}
-				contenido:c 								{: GlobalVariables.saleBloque();
+				contenido:c									{: GlobalVariables.saleBloque();
 															:}
-				llaveDer									{: RESULT = new SimboloFuncionDef(i,a,c);
+				llaveDer									{: RESULT = new SimboloFuncionDecl(i,t);
+															:}
+				|
+				tipoVoid:t id:i 							{: GlobalVariables.asignaFuncionID(i,t);
+															:}
+				parenIzq									{: GlobalVariables.entraBloque();
+															:}
+				args:a										{: GlobalVariables.asignaFuncionArgs(i,a);
+															:}
+				parenDer llaveIzq							{: :}
+				contenido:c									{: GlobalVariables.saleBloque();
+															:}
+				llaveDer									{: RESULT = new SimboloFuncionDecl(i,t);
 															:}
 			;
 		
-funcionInvk ::= id:i parenIzq params:p parenDer 			{: RESULT = new SimboloFuncionInvk(i,p); :}
+funcionInvk ::= id:i										{: GlobalVariables.compruebaFuncionID(i);
+															:}
+				parenIzq params:p 							{: :}
+				parenDer									{: RESULT = new SimboloFuncionInvk(i,p);
+															:}
 		;
 			
 args ::= tipoVar:t id:i 									{: GlobalVariables.asignaID(i,t);
@@ -107,9 +120,13 @@ nextArg ::= coma tipoVar:t id:i 							{: GlobalVariables.asignaID(i,t);
 															:}
 		;
 		
-contenido ::= contenido:c asignacion:a						{: RESULT = new SimboloContenido(c,a); :}
-			| contenido:c funcionInvk:f puntocoma 			{: RESULT = new SimboloContenido(c,f); :}
+contenido ::= contenido:c expresion:e						{: RESULT = new SimboloContenido(c,e); :}
+			| contenido:c returnSym:r Operacion:o puntocoma	{: RESULT = new SimboloContenido(c,r,o); :}
 			| 												{: RESULT = null; :}
+			;
+			
+expresion ::= asignacion:a 									{: RESULT = new SimboloExpresion(a); :}
+			| funcionInvk:f puntocoma						{: RESULT = new SimboloExpresion(f); :}
 			;
 		
 Operacion ::= Operacion1:o									{: RESULT = new SimboloOperacion(o); :}
@@ -128,7 +145,9 @@ Operacion3 ::= factor:f 									{: RESULT = new SimboloOperacion(f); :}
 		| Operacion3:o opLogico:l factor:f					{: RESULT = new SimboloOperacion(o,l,f); :}
 		;
 	
-factor ::= id:i 											{: RESULT = new SimboloFactor(i); :}
+factor ::= id:i 											{: GlobalVariables.compruebaID(i);
+																RESULT = new SimboloFactor(i);
+															:}
 		| numero:n 											{: RESULT = new SimboloFactor(n); :}
 		| booleano:b										{: RESULT = new SimboloFactor(b); :}
 		| string:s											{: RESULT = new SimboloFactor(s); :}

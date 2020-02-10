@@ -1,10 +1,17 @@
 class MyClass {
+	void stringToInteger(){}
+	void my_function(){
+		String aOSDAOD = "";
+	}
 	void funcioncilla ( int c, String s ) {
 		c = stringToInteger(my_function(s));
+		boolean algo = true;
 	}
 	void main () {
 		int aaa = 2;
 		int b = "asasas";
-		String hfausfh = funcioncilla(aaa, "holo");
+		return "vytivg";
+		String hfausfh = funcioncilla(aaa, "holo", (4+5)>33);
 	}
+	int main;
 }

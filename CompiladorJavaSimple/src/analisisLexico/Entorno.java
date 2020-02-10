@@ -1,62 +1,21 @@
 package analisisLexico;
 
-import java.util.EmptyStackException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Stack;
+import java.util.List;
 
 import analisisSintactico.sym;
 import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 
 public class Entorno {
 	
-	public static class GlobalVariables{
-		
-		public static Boolean DEBUG_MODE = true;
-		private static Integer CONTADOR = 1;
-		private static Stack<Entorno> pilaEntornos = new Stack<>();
-		
-		public static Entorno entornoActual() {
-			try {
-				return pilaEntornos.peek();
-			}catch(EmptyStackException e) {
-				return null;
-			}
-		}
-		
-		public static void asignaID(String id, String tipo) {
-			Entorno top = entornoActual();
-			if(top.contains(id))
-				throw new Error("ID "+id+" YA EXISTE");
-			top.put(Tipo.getTipo(tipo), id);
-		}
-		
-		public static void asignaFuncionID(String id, String tipo) {
-			Entorno top = entornoActual();
-			if(top.containsFuncion(id))
-				throw new Error("FUNCION ID "+id+" YA EXISTE");
-			top.putFuncion(Tipo.getTipo(tipo), id);
-		}
-		
-		public static void entraBloque() {
-			Entorno e = new Entorno(entornoActual());
-			pilaEntornos.push(e);
-		}
-		
-		public static void saleBloque() {
-			Entorno popped = pilaEntornos.pop();
-			if(DEBUG_MODE) {
-				popped.printEntorno();
-			}
-		}
-		
-	}
-	
-	
 	private Integer nivel;
 	
 	private Hashtable<String, ComplexSymbol> tablaIDs;
 	private Hashtable<String, ComplexSymbol> tablaFunciones;
+	private Hashtable<String, List<String>> tablaFuncionesArgs;
+	
 	private Entorno entornoAnterior;
 	private Integer _identificador_entorno;
 	
@@ -66,14 +25,11 @@ public class Entorno {
 		}else {
 			this.nivel = entornoAnterior.getNivel() + 1;
 		}
-		this._identificador_entorno = getIdentificador();
+		this._identificador_entorno = GlobalVariables.getIdentificador();
 		this.tablaIDs = new Hashtable<>();
 		this.tablaFunciones = new Hashtable<>();
-		this.entornoAnterior = entornoAnterior;
-	}
-	
-	public static Integer getIdentificador() {
-		return GlobalVariables.CONTADOR++;
+		this.tablaFuncionesArgs = new Hashtable<>()
+;		this.entornoAnterior = entornoAnterior;
 	}
 	
 	public Integer getNivel() {
@@ -104,35 +60,62 @@ public class Entorno {
 		ComplexSymbol simbolo = new ComplexSymbol(tipo.name(), sym.id);
 		this.tablaIDs.put(s, simbolo);
 	}
-	
 	public Boolean contains(String s) {
 		return this.tablaIDs.containsKey(s);
 	}
-	
 	public ComplexSymbol get(String s) {
-		for(Entorno e = this; e != null; e = e.entornoAnterior) {
+		for(Entorno e = this; e != null; e = e.getEntornoAnterior()) {
 			ComplexSymbol sim = e.tablaIDs.get(s);
 			if(sim!=null)
 				return sim;
 		}
 		return null;
 	}
+	
+	
 	public void putFuncion(Tipo tipo, String s) {
 		ComplexSymbol simbolo = new ComplexSymbol(tipo.name(), sym.id);
 		this.tablaFunciones.put(s, simbolo);
 	}
-	
 	public Boolean containsFuncion(String s) {
 		return this.tablaFunciones.containsKey(s);
 	}
-	
 	public ComplexSymbol getFuncion(String s) {
-		for(Entorno e = this; e != null; e = e.entornoAnterior) {
+		for(Entorno e = this; e != null; e = e.getEntornoAnterior()) {
 			ComplexSymbol sim = e.tablaFunciones.get(s);
 			if(sim!=null)
 				return sim;
 		}
 		return null;
+	}
+	
+	// Añade argumentos a la función
+	public void putFuncionArgs(String funcionID, String argumentoID) {
+		if(!this.getEntornoAnterior().containsFuncion(funcionID))
+			throw new Error("La función con identificador: '"+funcionID+"' no ha sido declarada en la tabla de funciones del entorno");
+		if(!this.contains(argumentoID))
+			throw new Error("El identificador: '"+argumentoID+"' no ha sido declarado en la tabla de identificadores del entorno");
+		if(this.getEntornoAnterior().containsFuncionArgs(funcionID, argumentoID))
+			throw new Error("Se ha definido el argumento: '"+argumentoID+"' duplicado para la función '"+funcionID+"'");
+		List<String> args = this.getFuncionArgs(funcionID);
+		if(args==null) {
+			List<String> aux = new ArrayList<>();
+			aux.add(argumentoID);
+			this.getEntornoAnterior().tablaFuncionesArgs.put(funcionID, aux);
+		}else {
+			args.add(argumentoID);
+		}
+	}
+	public Boolean containsFuncionArgs(String funcionID, String argumentoID) {
+		if(!this.tablaFuncionesArgs.containsKey(funcionID))
+			return false;
+		if(!this.tablaFuncionesArgs.get(funcionID).contains(argumentoID)) {
+			return false;
+		}
+		return true;
+	}
+	public List<String> getFuncionArgs(String funcionID) {
+		return this.getEntornoAnterior().tablaFuncionesArgs.get(funcionID);
 	}
 	
 	public void printEntorno() {
@@ -157,12 +140,26 @@ public class Entorno {
 			System.out.println("ID: "+key+" , TIPO: "+symbol.getName());
 		}
 		System.out.println();
+		System.out.println(" FUNCIONES - ARGUMENTOS: ");
+		Iterator<String> iteratorFuncionesArgs = tablaFuncionesArgs.keySet().iterator();
+		while(iteratorFuncionesArgs.hasNext()) {
+			String key = (String) iteratorFuncionesArgs.next();
+			List<String> args = tablaFuncionesArgs.get(key);
+			StringBuffer aux = new StringBuffer();
+			args.forEach(x->{aux.append(" "+x+" ");});
+			System.out.println("FUNCION ID: "+key+" , ARGS: "+aux);
+		}
+		System.out.println();
 		System.out.println("___<<<____________<<<______________<<<");
 	}
 	
 	@Override
 	public String toString() {
 		return this._identificador_entorno + "";
+	}
+
+	public Entorno getEntornoAnterior() {
+		return entornoAnterior;
 	}
 	
 }

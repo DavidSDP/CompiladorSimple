@@ -646,7 +646,7 @@ public class Scanner implements java_cup.runtime.Scanner {
             // fall through
           case 12: break;
           case 3: 
-            { return new SimboloID(symbol(sym.id, this.yytext()));
+            { return symbol(sym.id, this.yytext());
             } 
             // fall through
           case 13: break;

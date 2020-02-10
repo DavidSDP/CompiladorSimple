@@ -3,17 +3,19 @@ package analisisSemantico.simbolos;
 public class SimboloContenido {
 	
 	private SimboloContenido contenido;
-	private SimboloAsignacion asignacion;
-	private SimboloFuncionInvk funcionInvk;
+	private SimboloExpresion expresion;
+	private SimboloOperacion operacion;
+	private String retorno;
 	
-	public SimboloContenido(SimboloContenido contenido, SimboloAsignacion asignacion) {
-		this.contenido = contenido;
-		this.asignacion = asignacion;
+	public SimboloContenido(SimboloContenido c, SimboloExpresion e) {
+		this.contenido = c;
+		this.expresion = e;
 	}
 	
-	public SimboloContenido(SimboloContenido contenido, SimboloFuncionInvk funcionInvk) {
-		this.contenido = contenido;
-		this.funcionInvk = funcionInvk;
+	public SimboloContenido(SimboloContenido c, String r, SimboloOperacion o) {
+		this.retorno = r;
+		this.contenido = c;
+		this.operacion = o;
 	}
 	
 }

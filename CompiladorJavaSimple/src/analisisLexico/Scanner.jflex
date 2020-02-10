@@ -30,6 +30,7 @@ ESPACIO		= {FINLINEA} | [ \t\f]
 tClass		=	"class"
 tipoVar		=	"int"|"boolean"|"String"
 tipoVoid	=	"void"
+returnSym	=	"return"
 
 llaveIzq	=	"{"
 llaveDer	=	"}"
@@ -60,6 +61,7 @@ id			=	[A-Za-z][A-Za-z0-9_]*
 {tClass}		{return symbol(sym.tclass, this.yytext());}
 {tipoVar}		{return symbol(sym.tipoVar, this.yytext());}
 {tipoVoid}		{return symbol(sym.tipoVoid, this.yytext());}
+{returnSym}		{return symbol(sym.returnSym, this.yytext());}
 
 {llaveIzq}		{return symbol(sym.llaveIzq, null);}
 {llaveDer}		{return symbol(sym.llaveDer, null);}

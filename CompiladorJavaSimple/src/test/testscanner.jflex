@@ -51,6 +51,6 @@ id			=	[A-Za-z][A-Za-z0-9_]*
 {puntocoma}		{return symbol(sym.puntocoma, null);}
 
 {numero}		{return symbol(sym.numero, this.yytext());}
-{id}			{return new SimboloID(symbol(sym.id, this.yytext()));}
+{id}			{return symbol(sym.id, this.yytext());}
 
 [^]				{throw new Error("Carácter no reconocido: <"+yytext()+">"); }

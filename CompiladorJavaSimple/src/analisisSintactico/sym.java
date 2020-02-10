@@ -8,31 +8,33 @@ package analisisSintactico;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int string = 17;
-  public static final int opLogico = 13;
-  public static final int llaveIzq = 5;
+  public static final int string = 18;
+  public static final int opLogico = 14;
+  public static final int llaveIzq = 6;
+  public static final int returnSym = 4;
   public static final int tipoVar = 3;
-  public static final int tipoVoid = 4;
-  public static final int coma = 9;
-  public static final int numero = 18;
-  public static final int llaveDer = 6;
-  public static final int booleano = 14;
-  public static final int opProd = 16;
-  public static final int parenIzq = 10;
-  public static final int comparador = 12;
-  public static final int parenDer = 11;
-  public static final int igual = 7;
+  public static final int tipoVoid = 5;
+  public static final int coma = 10;
+  public static final int numero = 19;
+  public static final int llaveDer = 7;
+  public static final int booleano = 15;
+  public static final int opProd = 17;
+  public static final int parenIzq = 11;
+  public static final int comparador = 13;
+  public static final int parenDer = 12;
+  public static final int igual = 8;
   public static final int EOF = 0;
-  public static final int id = 19;
-  public static final int puntocoma = 8;
+  public static final int id = 20;
+  public static final int puntocoma = 9;
   public static final int error = 1;
   public static final int tclass = 2;
-  public static final int opSuma = 15;
+  public static final int opSuma = 16;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
   "tclass",
   "tipoVar",
+  "returnSym",
   "tipoVoid",
   "llaveIzq",
   "llaveDer",

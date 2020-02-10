@@ -1,10 +1,13 @@
 package analisisSemantico.simbolos;
 
+import analisisLexico.Entorno.Tipo;
+
 public class SimboloOperacion{
 
 	private SimboloOperacion operacion;
 	private String operador;
 	private SimboloFactor factor;
+	private Tipo tipo;
 	
 	public SimboloOperacion(SimboloOperacion o) {
 		this.operacion = o;
@@ -42,6 +45,14 @@ public class SimboloOperacion{
 
 	public void setOperador(String operador) {
 		this.operador = operador;
+	}
+
+	public Tipo getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Tipo tipo) {
+		this.tipo = tipo;
 	}
 	
 }
